@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:untitled3/writeStory.dart';
+
+import 'login.dart';
 
 Color myColor1 = const Color(0xFFFFE3D9);
 Color myColor2 = const Color(0xFFFFC7AE);
@@ -47,12 +50,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
           },
         );
         print(response.data);
-        if (response.statusCode == 200) {
+        if (response.statusCode == 201) {
           print('Sign up successful');
           // Clear the text fields
           _nameController.clear();
           _idController.clear();
           _passwordController.clear();
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => LoginScreen()),//임시로 이미지 셀렉 화면임!
+          );
+
+
         } else {
           print('Sign up failed: ${response.statusCode}');
         }
@@ -68,7 +77,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       appBar: AppBar(
         title: SizedBox(
           height: 40, // 로고 이미지의 높이
-          child: Image.asset('assets/logo.png'), // 로고 이미지
+          child: Image.asset('assets/images/hackerton_logo.png'), // 로고 이미지
         ),
         centerTitle: true, // 중앙 정렬 설정
       ),
@@ -146,12 +155,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ElevatedButton(
                 onPressed: _signUp,
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: myColor3,
-                  // backgroundColor: myColor1,
+                  foregroundColor: myColor4,
+                  backgroundColor: myColor1,
                 ),
                 child: Text('Sign Up'),
               ),
-
+              ElevatedButton(
+                onPressed: (){
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),//임시로 이미지 셀렉 화면임!
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: myColor4,
+                  backgroundColor: myColor1,
+                ),
+                child: Text('Back to Login'),
+              ),
             ],
           ),
         ),

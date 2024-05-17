@@ -2,9 +2,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dio/dio.dart';
+import 'package:untitled3/login.dart';
 import 'package:untitled3/signUp.dart';
+import 'package:untitled3/widgets/backAppBar.dart';
 import 'writeStory.dart';
-
+import 'widgets/appBar.dart';
+Color myColor1 = const Color(0xFFFFE3D9);
+Color myColor2 = const Color(0xFFFFC7AE);
+Color myColor3 = const Color(0xFFF98C6E);
+Color myColor4 = const Color(0xFF471900);
 
 
 void main() {
@@ -26,7 +32,7 @@ class _ImageSelectScreenState extends State<ImageSelectScreen> {
   File? _image;
   final picker = ImagePicker();
 
-  Future getImage() async {
+  Future getImage() async {//이미지 셀렉 메소드
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
@@ -38,9 +44,9 @@ class _ImageSelectScreenState extends State<ImageSelectScreen> {
     }
   }
 
-  Future<void> uploadFile() async {
+  Future<void> uploadFile() async {//파일 업로드 함수
     if (_image == null) return;
-
+    print('toke = $access_token');
     var dio = Dio();
     var formData = FormData.fromMap({
       'image': await MultipartFile.fromFile(_image!.path),
@@ -70,32 +76,47 @@ class _ImageSelectScreenState extends State<ImageSelectScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('New moment', style: TextStyle(color: myColor3),),
-      ),
+      appBar: BackAppBar(),
+      // appBar: AppBar(
+      //   title: Text('New moment', style: TextStyle(color: myColor3),),
+      // ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             _image == null
-                ? Text('No image selected.', style: TextStyle(color: myColor2),)
+                ? Text('Select your image first!', style: TextStyle(color: myColor2),)
                 : Image.file(_image!),
             SizedBox(height: 20),
-            ElevatedButton(
+            ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                backgroundColor: myColor1, // 배경색을 myColor1로 설정
+              backgroundColor: myColor1
               ),
-              onPressed: uploadFile,
-              child: Text('Upload Image', style: TextStyle(color: myColor4),),
+              onPressed: getImage,
+              icon: Icon(
+                Icons.add_a_photo,
+                color: myColor4,
+              ),
+              label: Text(
+                'Pick Image',
+                style: TextStyle(color: myColor4),
+              ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+
+      floatingActionButton: FloatingActionButton.extended(
         backgroundColor: myColor1,
-        onPressed: getImage,
-        tooltip: 'Pick Image',
-        child: Icon(Icons.add_a_photo, color: myColor4),
+        onPressed: uploadFile,
+        label: Text(
+          'Go to Writing',
+          style: TextStyle(color: myColor4),
+        ),
+        icon: Icon(
+          Icons.arrow_right_alt,
+          color: myColor4,
+        ),
       ),
     );
   }
